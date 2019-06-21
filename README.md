@@ -1,5 +1,5 @@
 # jenv-guide
-jenv guide, problem diagnosis
+jenv guide & troubleshoot
 
 ## jenv简介  
 linux/mac OS下的命令行工具，功能是用来管理java的多版本  
@@ -71,16 +71,27 @@ You may restart your session to activate jenv export plugin echo export plugin a
 ```
 参考：https://developer.bring.com/blog/configuring-jenv-the-right-way/
 
+如果报错
+```
+jenv: no such command `enable-plugin'
+```
+
+执行一下`jenv doctor`命令，会检测问题，很可能是没有做初始化，需要将以下语句放入到zshrc中  
+```
+eval "$(jenv init -)"
+```
+
+
 ## 版本设定
-### 全局jdk版本  
+### 设定全局jdk版本  
 ``` bash
 shiming@pro ➜  ~ jenv global 1.8
 shiming@pro ➜  ~ javac -version
 javac 1.8.0_212
 ```
 
-### 本地jdk版本
-先`cd`到目录，然后执行`jenv local {version}`则在此目录使用指定的版本    
+### 设定本地jdk版本
+先`cd`到目录，然后执行`jenv local {version}`则在此目录中使用指定的java版本    
 ``` bash
 shiming@pro ➜  ~ cd ~/x
 shiming@pro ➜  x jenv local 11
@@ -94,29 +105,4 @@ drwxr-xr-x+ 137 shiming  staff  4384 Jun 21 11:53 ..
 shiming@pro ➜  x cd ..
 shiming@pro ➜  ~ javac -version
 javac 1.8.0_212  # 全局还是java8
-```
-
-## troubleshoot  
-### jenv doctor
-如果使用jenv的过程中遇到报错，先使用`jenv doctor`检查一下，有问题会指出并给出解决建议    
-```
-shiming@pro ➜  ~ jenv doctor
-[OK]	No JAVA_HOME set
-[OK]	Java binaries in path are jenv shims
-[OK]	Jenv is correctly loaded
-```
-
-### jenv: no such command `enable-plugin'
-
-
-```
-shiming@pro ➜  ~ jenv enable-plugin maven
-jenv: no such command `enable-plugin'
-shiming@pro ➜  ~ jenv doctor
-[OK]	No JAVA_HOME set
-[ERROR]	Java binary in path is not in the jenv shims.
-[ERROR]	Please check your path, or try using /path/to/java/home is not a valid path to java installation.
-	PATH : /usr/local/Cellar/jenv/0.5.2/libexec/libexec:/Users/shiming/Downloads/sonarqube-6.7.6/bin/macosx-universal-64:/Users/shiming/Downloads/sonar-scanner-3.3.0.1492-macosx/bin:/Users/shiming/fabric-samples/bin:/usr/local/Cellar/grafana/5.4.3/bin:/usr/local/Cellar/python/3.7/bin:/usr/local/Cellar/python/3.7.1/bin:/usr/local/mysql/bin:/Users/shiming/Nutstore/5-goland/bin:/bin/:/Users/shiming/Downloads/sonarqube-6.7.6/bin/macosx-universal-64:/Users/shiming/Downloads/sonar-scanner-3.3.0.1492-macosx/bin:/Users/shiming/fabric-samples/bin:/Users/shiming/.nvm/versions/node/v8.15.1/bin:/usr/local/Cellar/grafana/5.4.3/bin:/usr/local/Cellar/python/3.7/bin:/usr/local/Cellar/python/3.7.1/bin:/usr/local/mysql/bin:/Users/shiming/Nutstore/5-goland/bin:/bin/:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin
-[ERROR]	Jenv is not loaded in your zsh
-[ERROR]	To fix : 	cat eval "$(jenv init -)" >> /Users/shiming/.zshrc
 ```
